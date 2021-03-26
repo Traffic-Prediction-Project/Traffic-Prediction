@@ -42,7 +42,6 @@ def real_entropy(traffic_info):
     return s_real
 
 
-# f(Πmax) =−Πmaxlog2(Πmax) − (1 − Πmax)log2(1 − Πmax) + (1 − Πmax)log2(N(i) − 1) − S
 def get_max_predictability(N, S):
     ans = np.zeros(N.shape)
     for i in range(N.shape):
@@ -51,7 +50,8 @@ def get_max_predictability(N, S):
         s = 0.0
         while x2 - x1 > 1e-4:
             x0 = (x1 + x2) / 2
-            if -x0 * np.log2(x0) - (1-x0)*np.log2(1-x0)+(1-x0) * np.log2(N[i]-1) - S[i] > 0:
+            if -x0 * np.log2(x0) - (1 - x0) * np.log2(1 - x0) + (
+                    1 - x0) * np.log2(N[i] - 1) - S[i] > 0:
                 x1 = x0
             else:
                 x2 = x0
@@ -59,13 +59,16 @@ def get_max_predictability(N, S):
         ans[i] = s
     return ans
 
+
 if __name__ == '__main__':
     pd_traffic_info = pd.read_csv('.\\resources\\上海区域交通信息.csv')
     # times = pd_traffic_info.loc[:,"time"]
     # times = pd.DataFrame(times)
     # region = info[0:0]
 
+    # 去除-1占比大于10%的数据
     traffic_info = pd_traffic_info.values[:, 1:]
+    delete_list = []
     for i in range(traffic_info.shape[1]):
         mean_value = 0
         mean_sum = 0
@@ -74,11 +77,14 @@ if __name__ == '__main__':
             if traffic_info[j][i] != -1.0:
                 mean_value += traffic_info[j][i]
                 mean_sum += 1
-
-        mean = mean_value / mean_sum
-        for j in range(traffic_info.shape[0]):
-            if traffic_info[j][i] == -1.0:
-                traffic_info[j][i] = mean
+        if mean_sum <= 0.9 * traffic_info.shape[0]:
+            delete_list.append(i)
+        else:
+            mean = mean_value / mean_sum
+            for j in range(traffic_info.shape[0]):
+                if traffic_info[j][i] == -1.0:
+                    traffic_info[j][i] = mean
+    traffic_info = np.delete(traffic_info, delete_list, axis=1)
 
     # 离散化
     traffic_info *= 10
@@ -94,10 +100,10 @@ if __name__ == '__main__':
     pd_s_shannon = pd.DataFrame(s_shannon)
     pd_s_real = pd.DataFrame(s_real)
     pd_N = pd.DataFrame(N)
-    ans = pd.concat([pd_s_random, pd_s_shannon], axis=1)
-    ans = pd.concat([ans, pd_s_real], axis=1)
-    ans = pd.concat([ans, pd_N], axis=1)
-    ans.to_csv("ans.csv", index=False)
+    entropy = pd.concat([pd_s_random, pd_s_shannon], axis=1)
+    entropy = pd.concat([entropy, pd_s_real], axis=1)
+    entropy = pd.concat([entropy, pd_N], axis=1)
+    entropy.to_csv(".\\resources\\entropy.csv", index=False)
 
     # random_pi_max = get_max_predictability(N, s_random)
     # print(random_pi_max)
