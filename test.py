@@ -87,7 +87,7 @@ if __name__ == '__main__':
     traffic_info = np.delete(traffic_info, delete_list, axis=1)
 
     # 离散化
-    traffic_info *= 10
+    traffic_info *= 1000
     traffic_info = np.trunc(traffic_info)
 
     # 计算熵
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     entropy = pd.concat([pd_s_random, pd_s_shannon], axis=1)
     entropy = pd.concat([entropy, pd_s_real], axis=1)
     entropy = pd.concat([entropy, pd_N], axis=1)
-    entropy.to_csv(".\\resources\\entropy.csv", index=False)
+    entropy.to_csv(".\\resources\\entropy_1000.csv", index=False)
 
     # random_pi_max = get_max_predictability(N, s_random)
     # print(random_pi_max)
