@@ -7,6 +7,10 @@ __pycache__/
 *.txt
 *.csv
 
+# local config 
+.vscode
+resources
+
 # C extensions
 *.so
 
