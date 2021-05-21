@@ -7,6 +7,11 @@ def thefunc(x, n, s):
     return -x * np.log2(x) - (1 - x) * np.log2(1 - x) + (
         1 - x) * np.log2(n - 1) - s
 
+def pi_func(x):
+    return -x * np.log2(x) - (1 - x) * np.log2(1 - x)
+
+def pi_func_2(x):
+    return -np.log2(x) - (1 - x) * np.log2(1 - x) / x
 
 def get_max_predictability(N, S):
     ans = np.zeros(N.shape)
@@ -27,11 +32,12 @@ def get_max_predictability(N, S):
 
 
 if __name__ == '__main__':
-    x = [i for i in range(0, 100, 1)]
+    x = [i for i in range(0, 1000, 1)]
     x = np.array(x)
-    x = x / 100
-    y = thefunc(x, 7, 2.807354922)
-    print(y.shape)
+    x = x / 1000
+    # y = thefunc(x, 7, 2.807354922)
+    # print(y.shape)
+    y = pi_func_2(x)
     plt.plot(x, y)
     plt.show()
 

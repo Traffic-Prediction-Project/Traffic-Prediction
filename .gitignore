@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 
 # csv/txt related
-*.txt
-*.csv
+# *.txt
+# *.csv
 
 # local config 
 .vscode
