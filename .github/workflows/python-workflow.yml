@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: print Ref
+      run: echo "${GITHUB_BRANCH##*/}"
+      env:
+        GITHUB_BRANCH: ${{ github.ref }}
     - uses: actions/checkout@v2
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
