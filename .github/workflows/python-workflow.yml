@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: print Refs
+    - name: print Ref
       run: echo "${GITHUB_BRANCH##*/}"
       env:
         GITHUB_BRANCH: ${{ github.ref }}
